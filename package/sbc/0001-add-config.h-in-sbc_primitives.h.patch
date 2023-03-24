@@ -1,0 +1,27 @@
+From 9a4d780f7186c644e38c477d2f1c0dc5580cc66a Mon Sep 17 00:00:00 2001
+From: lujianliang <lujianliang@allwinnertech.com>
+Date: Mon, 1 Nov 2021 21:42:35 +0800
+Subject: [PATCH] add config.h in sbc_primitives.h
+
+Signed-off-by: lujianliang <lujianliang@allwinnertech.com>
+---
+ sbc/sbc_primitives.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/sbc/sbc_primitives.h b/sbc/sbc_primitives.h
+index e01c957..b060484 100644
+--- a/sbc/sbc_primitives.h
++++ b/sbc/sbc_primitives.h
+@@ -27,6 +27,10 @@
+ #ifndef __SBC_PRIMITIVES_H
+ #define __SBC_PRIMITIVES_H
+
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
+ #define SCALE_OUT_BITS 15
+ #define SBC_X_BUFFER_SIZE 328
+
+-- 
+2.29.0

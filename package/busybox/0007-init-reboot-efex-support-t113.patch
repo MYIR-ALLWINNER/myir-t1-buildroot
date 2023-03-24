@@ -1,0 +1,83 @@
+From d46ddcbbe97f2846144bfc4f6d119170c53cdd88 Mon Sep 17 00:00:00 2001
+From: xixinle <xixinle@allwinnertech.com>
+Date: Wed, 11 Aug 2021 17:33:43 +0800
+Subject: [PATCH] init: reboot efex support t113
+
+Signed-off-by: xixinle <xixinle@allwinnertech.com>
+---
+ init/halt.c | 45 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
+
+diff --git a/init/halt.c b/init/halt.c
+index 19775657b..f9e956360 100755
+--- a/init/halt.c
++++ b/init/halt.c
+@@ -105,7 +105,8 @@ struct bootloader_message {
+ };
+
+ static const char *MISC_DEVICE = "/dev/by-name/misc";
+-static const char *RTC_SYSFS_FLAG = "/sys/devices/platform/soc/rtc/flag";
++static const char *RTC_SYSFS_FLAG_T507 = "/sys/devices/platform/soc/rtc/flag";
++static const char *RTC_SYSFS_FLAG_T113 = "/sys/devices/platform/soc@3000000/7090000.rtc/flag";
+ // ------------------------------------
+ // for misc partitions on block devices
+ // ------------------------------------
+@@ -235,13 +236,55 @@ static int write_misc(const char *reason){
+ 	return 0;
+ }
+
++static int check_sunxi_platform(void)
++{
++	int err = 0;
++	FILE *fp = NULL;
++	char read_result[256];
++	memset(read_result, 0, sizeof(read_result));
++
++	fp = fopen("/sys/class/sunxi_info/sys_info", "r");
++	if (fp) {
++		err = fread(read_result, sizeof(char), 256 ,fp);
++		fclose(fp);
++	}
++
++	if(err > 0){
++		//printf("read %d bytes ok,read_result:\n%s\n", err, read_result);
++		//printf("read /sys/class/sunxi_info/sys_info ok\n");
++	}
++	else {
++		printf("read /sys/class/sunxi_info/sys_info fail, return\n");
++		return -1;
++	}
++
++	if(strstr(read_result, "sun8iw20")!=NULL){
++		return 1;
++	}else if(strstr(read_result, "sun50iw9")!=NULL){
++		return 0;
++	}else {
++		return -1;
++	}
++}
++
+ /* force the next boot to recovery/efex */
+ static int write_rtc_flag(const char *reason)
+ {
+ 	int ret;
+ 	FILE* f;
+ 	int count;
++	char* RTC_SYSFS_FLAG;
+
++	if(check_sunxi_platform()==1)
++	{
++		//printf("match T113!\n");
++		RTC_SYSFS_FLAG = RTC_SYSFS_FLAG_T113;
++	}
++	else
++	{
++		//printf("not match T113, use default T507!\n");
++		RTC_SYSFS_FLAG = RTC_SYSFS_FLAG_T507;
++	}
+ 	ret = access(RTC_SYSFS_FLAG, F_OK); //mode:F_OK
+ 	if(ret == -1)
+ 	{
+--
+2.29.0
+

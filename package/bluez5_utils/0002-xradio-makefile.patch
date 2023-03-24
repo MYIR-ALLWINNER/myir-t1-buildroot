@@ -1,0 +1,136 @@
+From 5ea0cf977c457db3a7931f874160f18bf4d37104 Mon Sep 17 00:00:00 2001
+From: huanglb <huanglb@allwinnertech.com>
+Date: Fri, 20 Aug 2021 19:11:25 +0800
+Subject: [PATCH 1/4] add xradio
+
+---
+ Makefile.tools | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+ mode change 100644 => 100755 Makefile.tools
+
+diff --git a/Makefile.tools b/Makefile.tools
+old mode 100644
+new mode 100755
+index 9106c1a..56aec96
+--- a/Makefile.tools
++++ b/Makefile.tools
+@@ -327,7 +327,8 @@ tools_hciattach_SOURCES = tools/hciattach.c tools/hciattach.h \
+ 						tools/hciattach_ath3k.c \
+ 						tools/hciattach_qualcomm.c \
+ 						tools/hciattach_intel.c \
+-						tools/hciattach_bcm43xx.c
++						tools/hciattach_bcm43xx.c \
++						tools/hciattach_xradio.c
+ tools_hciattach_LDADD = lib/libbluetooth-internal.la
+ 
+ tools_hciconfig_SOURCES = tools/hciconfig.c tools/csr.h tools/csr.c
+-- 
+2.29.0
+
+
+From 9bc66c3ab6d1b2af994b89ce05f7a27355774a72 Mon Sep 17 00:00:00 2001
+From: huanglb <huanglb@allwinnertech.com>
+Date: Fri, 20 Aug 2021 19:34:15 +0800
+Subject: [PATCH 2/4] add xradio tools
+
+---
+ android/Android.mk | 1 +
+ 1 file changed, 1 insertion(+)
+ mode change 100644 => 100755 android/Android.mk
+
+diff --git a/android/Android.mk b/android/Android.mk
+old mode 100644
+new mode 100755
+index 76a826b..6cff857
+--- a/android/Android.mk
++++ b/android/Android.mk
+@@ -699,6 +699,7 @@ LOCAL_SRC_FILES := \
+ 	bluez/tools/hciattach_qualcomm.c \
+ 	bluez/tools/hciattach_intel.c \
+ 	bluez/tools/hciattach_bcm43xx.c \
++	bluez/tools/hciattach_xradio.c \
+ 	bluez/lib/bluetooth.c \
+ 	bluez/lib/hci.c \
+ 
+-- 
+2.29.0
+
+
+From 532b9b6e56178905359b0ec09706034bb060a5bb Mon Sep 17 00:00:00 2001
+From: huanglb <huanglb@allwinnertech.com>
+Date: Fri, 20 Aug 2021 19:51:17 +0800
+Subject: [PATCH 3/4] fix xradio makefile problem
+
+---
+ Makefile.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+ mode change 100644 => 100755 Makefile.in
+
+diff --git a/Makefile.in b/Makefile.in
+old mode 100644
+new mode 100755
+index 5859d23..00a0388
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1331,7 +1331,7 @@ am__tools_hciattach_SOURCES_DIST = tools/hciattach.c tools/hciattach.h \
+ 	tools/hciattach_st.c tools/hciattach_ti.c \
+ 	tools/hciattach_tialt.c tools/hciattach_ath3k.c \
+ 	tools/hciattach_qualcomm.c tools/hciattach_intel.c \
+-	tools/hciattach_bcm43xx.c
++	tools/hciattach_bcm43xx.c tools/hciattach_xradio.c
+ @DEPRECATED_TRUE@@TOOLS_TRUE@am_tools_hciattach_OBJECTS =  \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_st.$(OBJEXT) \
+@@ -2780,6 +2780,7 @@ unit_tests = $(am__append_52) unit/test-eir unit/test-uuid \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_st.c \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_ti.c \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_tialt.c \
++@DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_xradio.c \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_ath3k.c \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_qualcomm.c \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@						tools/hciattach_intel.c \
+-- 
+2.29.0
+
+
+From c28eaed11679828e72e4a07f0cc148d7f1f3bd50 Mon Sep 17 00:00:00 2001
+From: huanglb <huanglb@allwinnertech.com>
+Date: Fri, 20 Aug 2021 20:04:51 +0800
+Subject: [PATCH 4/4] fix xradio makefile problem
+
+---
+ Makefile.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Makefile.in b/Makefile.in
+index 00a0388..5ac9a37 100755
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1337,6 +1337,7 @@ am__tools_hciattach_SOURCES_DIST = tools/hciattach.c tools/hciattach.h \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_st.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_ti.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_tialt.$(OBJEXT) \
++@DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_xradio.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_ath3k.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_qualcomm.$(OBJEXT) \
+ @DEPRECATED_TRUE@@TOOLS_TRUE@	tools/hciattach_intel.$(OBJEXT) \
+@@ -4853,6 +4854,8 @@ tools/hciattach_ti.$(OBJEXT): tools/$(am__dirstamp) \
+ 	tools/$(DEPDIR)/$(am__dirstamp)
+ tools/hciattach_tialt.$(OBJEXT): tools/$(am__dirstamp) \
+ 	tools/$(DEPDIR)/$(am__dirstamp)
++tools/hciattach_xradio.$(OBJEXT): tools/$(am__dirstamp) \
++	tools/$(DEPDIR)/$(am__dirstamp)
+ tools/hciattach_ath3k.$(OBJEXT): tools/$(am__dirstamp) \
+ 	tools/$(DEPDIR)/$(am__dirstamp)
+ tools/hciattach_qualcomm.$(OBJEXT): tools/$(am__dirstamp) \
+@@ -5754,6 +5757,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hciattach_st.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hciattach_ti.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hciattach_tialt.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hciattach_xradio.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hciconfig.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hcidump.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@tools/$(DEPDIR)/hcieventmask.Po@am__quote@
+-- 
+2.29.0
+
