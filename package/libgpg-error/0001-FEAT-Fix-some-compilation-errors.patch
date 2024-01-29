@@ -1,0 +1,71 @@
+From 58105238e534e3938489b9e4172094905fd8a32d Mon Sep 17 00:00:00 2001
+From: nico <2592716997@qq.com>
+Date: Mon, 29 Jan 2024 14:42:57 +0800
+Subject: [PATCH] FEAT: Fix some compilation errors
+
+---
+ src/Makefile.am    | 2 +-
+ src/Makefile.in    | 2 +-
+ src/mkstrtable.awk | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 8e6683f..3f208d5 100755
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -292,7 +292,7 @@ code-from-errno.h: mkerrcodes$(EXEEXT_FOR_BUILD) Makefile
+ 
+ errnos-sym.h: Makefile mkstrtable.awk errnos.in
+ 	$(AWK) -f $(srcdir)/mkstrtable.awk -v textidx=2 -v nogettext=1 \
+-		-v prefix=GPG_ERR_ -v namespace=errnos_ \
++		-v prefix=GPG_ERR_ -v pkg_namespace=errnos_ \
+ 		$(srcdir)/errnos.in >$@
+ 
+ 
+diff --git a/src/Makefile.in b/src/Makefile.in
+index f969a69..a888b71 100755
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -1613,7 +1613,7 @@ code-from-errno.h: mkerrcodes$(EXEEXT_FOR_BUILD) Makefile
+ 
+ errnos-sym.h: Makefile mkstrtable.awk errnos.in
+ 	$(AWK) -f $(srcdir)/mkstrtable.awk -v textidx=2 -v nogettext=1 \
+-		-v prefix=GPG_ERR_ -v namespace=errnos_ \
++		-v prefix=GPG_ERR_ -v pkg_namespace=errnos_ \
+ 		$(srcdir)/errnos.in >$@
+ 
+ mkheader$(EXEEXT_FOR_BUILD): mkheader.c Makefile
+diff --git a/src/mkstrtable.awk b/src/mkstrtable.awk
+index c9de9c1..da0ca8a 100755
+--- a/src/mkstrtable.awk
++++ b/src/mkstrtable.awk
+@@ -102,7 +102,7 @@ header {
+       print "/* The purpose of this complex string table is to produce";
+       print "   optimal code with a minimum of relocations.  */";
+       print "";
+-      print "static const char " namespace "msgstr[] = ";
++      print "static const char " pkg_namespace "msgstr[] = ";
+       header = 0;
+     }
+   else
+@@ -150,7 +150,7 @@ END {
+   else
+     print "  gettext_noop (\"" last_msgstr "\");";
+   print "";
+-  print "static const int " namespace "msgidx[] =";
++  print "static const int " pkg_namespace "msgidx[] =";
+   print "  {";
+   for (i = 0; i < coded_msgs; i++)
+     print "    " pos[i] ",";
+@@ -158,7 +158,7 @@ END {
+   print "  };";
+   print "";
+   print "static GPG_ERR_INLINE int";
+-  print namespace "msgidxof (int code)";
++  print pkg_namespace "msgidxof (int code)";
+   print "{";
+   print "  return (0 ? 0";
+ 
+-- 
+2.25.1
+

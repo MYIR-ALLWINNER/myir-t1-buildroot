@@ -1,0 +1,24 @@
+From 2b0b14bd40d720b16de16a5ad216b6f26447da83 Mon Sep 17 00:00:00 2001
+From: nico <2592716997@qq.com>
+Date: Thu, 18 Jan 2024 12:40:46 +0800
+Subject: [PATCH 2/2] FIX: Fixing Compilation Errors
+
+---
+ gdbusauth.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
+index 1a0ada5..0a93d27 100755
+--- a/gio/gdbusauth.c
++++ b/gio/gdbusauth.c
+@@ -1299,6 +1299,7 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
+                                                     &line_length,
+                                                     cancellable,
+                                                     error);
++	  if (line != NULL)
+           debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (line == NULL)
+             goto out;
+-- 
+2.25.1
+

@@ -1,0 +1,24 @@
+From 1aca55c1bc9a9cda6986258a90afabd8516f0ddf Mon Sep 17 00:00:00 2001
+From: nico <2592716997@qq.com>
+Date: Thu, 18 Jan 2024 22:36:42 +0800
+Subject: [PATCH] FEAT: Fix gdbusmessage.c compilation error
+
+---
+ gio/gdbusmessage.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+index be001ae..67ff3d7 100644
+--- a/gio/gdbusmessage.c
++++ b/gio/gdbusmessage.c
+@@ -2699,6 +2699,7 @@ g_dbus_message_to_blob (GDBusMessage          *message,
+   if (message->body != NULL)
+     {
+       gchar *tupled_signature_str;
++      if (signature != NULL)
+       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+       if (signature == NULL)
+         {
+-- 
+2.25.1
+
